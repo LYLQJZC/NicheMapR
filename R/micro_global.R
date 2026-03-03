@@ -20,12 +20,15 @@
 #' @param soiltype Soil type: Rock = 0, sand = 1, loamy sand = 2, sandy loam = 3, loam = 4, silt loam = 5, sandy clay loam = 6, clay loam = 7, silt clay loam = 8, sandy clay = 9, silty clay = 10, clay = 11, user-defined = 12, based on Campbell and Norman 1990 Table 9.1.
 #' @param minshade Minimum shade level to use (\%) (can be a single value or a vector of daily values)
 #' @param maxshade Maximum shade level to use (\%) (can be a single value or a vector of daily values)
+#' @param spatial Optional local directory containing \code{global_climate.nc} and
+#'   (if \code{runmoist = 0}) \code{soilw.mon.ltm.v2.nc}. If \code{NA}, the
+#'   function uses the configured default global climate folder.
 #' @param Usrhyt Local height (m) at which air temperature, wind speed and humidity are to be computed for organism of interest
 #' @param ... Additional arguments, see Details
 #' @usage micro_global(loc = c(-89.40123, 43.07305), timeinterval = 12, nyears = 1, soiltype = 4,
 #' REFL = 0.15, slope = 0, aspect = 0,
 #' DEP = c(0, 2.5,  5,  10,  15,  20,  30,  50,  100,  200), minshade = 0, maxshade = 90,
-#' Usrhyt = 0.01, ...)
+#' spatial = NA, Usrhyt = 0.01, ...)
 #' @return metout The above ground micrometeorological conditions under the minimum specified shade
 #' @return shadmet The above ground micrometeorological conditions under the maximum specified shade
 #' @return soil Hourly predictions of the soil temperatures under the minimum specified shade
@@ -336,6 +339,7 @@ micro_global <- function(
   DEP = c(0, 2.5, 5, 10, 15, 20, 30, 50, 100, 200),
   minshade = 0,
   maxshade = 90,
+  spatial = NA,
   dem = NA,
   dem.res = 30,
   zmin = -20,
@@ -747,17 +751,31 @@ micro_global <- function(
       }
     }
     # load global climate files
-    gcfolder <- paste(.libPaths()[1],"/gcfolder.rda",sep="")
-    if(file.exists(gcfolder) == FALSE){
-      folder <- "c:/globalclimate"
-      if(file.exists(paste0(folder,"/global_climate.nc")) == FALSE){
-        message("You don't appear to have the global climate data set - \n run function get.global.climate(folder = 'folder you want to put it in') .....\n exiting function micro_global")
-        opt <- options(show.error.messages=FALSE)
-        on.exit(options(opt))
-        stop()
+    if(!is.na(spatial)){
+      folder <- normalizePath(spatial, winslash = "/", mustWork = FALSE)
+      if(!dir.exists(folder)){
+        stop("`spatial` directory does not exist: ", folder, call. = FALSE)
       }
     }else{
-      load(gcfolder)
+      gcfolder <- paste(.libPaths()[1],"/gcfolder.rda",sep="")
+      if(file.exists(gcfolder) == FALSE){
+        folder <- "c:/globalclimate"
+        if(file.exists(paste0(folder,"/global_climate.nc")) == FALSE){
+          message("You don't appear to have the global climate data set - \n run function get.global.climate(folder = 'folder you want to put it in') .....\n exiting function micro_global")
+          opt <- options(show.error.messages=FALSE)
+          on.exit(options(opt))
+          stop()
+        }
+      }else{
+        load(gcfolder)
+      }
+    }
+
+    if(file.exists(file.path(folder, "global_climate.nc")) == FALSE){
+      stop("Missing required climate raster: ", file.path(folder, "global_climate.nc"), call. = FALSE)
+    }
+    if(runmoist == 0 && file.exists(file.path(folder, "soilw.mon.ltm.v2.nc")) == FALSE){
+      stop("Missing required soil moisture raster for runmoist = 0: ", file.path(folder, "soilw.mon.ltm.v2.nc"), call. = FALSE)
     }
     if (!requireNamespace("terra", quietly = TRUE)) {
       stop("package 'terra' is needed. Please install it.",

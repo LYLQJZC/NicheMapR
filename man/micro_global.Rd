@@ -8,7 +8,7 @@
 micro_global(loc = c(-89.40123, 43.07305), timeinterval = 12, nyears = 1, soiltype = 4,
 REFL = 0.15, slope = 0, aspect = 0,
 DEP = c(0, 2.5,  5,  10,  15,  20,  30,  50,  100,  200), minshade = 0, maxshade = 90,
-Usrhyt = 0.01, ...)
+spatial = NA, Usrhyt = 0.01, ...)
 }
 \arguments{
 \item{loc}{Longitude and latitude (decimal degrees)}
@@ -32,6 +32,8 @@ Usrhyt = 0.01, ...)
 \item{minshade}{Minimum shade level to use (\%) (can be a single value or a vector of daily values)}
 
 \item{maxshade}{Maximum shade level to use (\%) (can be a single value or a vector of daily values)}
+
+\item{spatial}{Optional local directory containing \code{global_climate.nc} and\n(if \code{runmoist = 0}) \code{soilw.mon.ltm.v2.nc}. If \code{NA}, the\nfunction uses the configured default global climate folder.}
 
 \item{dem}{A digital elevation model used produced by microclima function 'get_dem' via R package 'elevatr' (internally generated via same function based on 'loc' if dem = NA and terrain/elevatr/microclima != 0)}
 
