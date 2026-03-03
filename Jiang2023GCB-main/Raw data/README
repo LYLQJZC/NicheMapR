@@ -1,0 +1,62 @@
+all_lizards.csv: the occurrence records of Phrynocephalus vlangalii
+Sources:Collected:The data collected from literature/GBIF/and other field work
+Pop: Low:high-elevation population <3600 m asl High:Extra-high-elevation population >3600 m asl
+
+BM_all.csv: the body mass of P.vlangalii
+Elevation: the elevation of lizards 
+Sex:the gender of the lizards
+SVL: the snout-vent length of lizards(cm)
+BM: the body mass of lizards (g)
+
+CTm.csv: the thermal tolerance of vlangalii
+Elevation: the elevation of lizards 
+Sex:the gender of the lizards
+SVL: the snout-vent length of lizards(cm)
+BM: the body mass of lizards (g)
+CTmin:the critical thermal minimum of lizards (℃)
+CTmax:the critical thermal maximum of lizards (℃)
+
+Lizard_traits.csv: the parameter inputted in NicheMapR
+Ele：the elevation of three site
+Ww_g:  Wet weight of animal (g)
+T_Fmin: Minimum foraging temperature, °C (also affects burrow depth selection)
+T_F_max: Maximum foraging temperature, °C
+T_B_min:Minimum basking temperature, °C
+T_RB_min:Minimum temperature at which animal will move from retreat to basking site, °C
+T_pref:Preferred body temperature, °C
+CT_max:Critical thermal maximum, °C (affects burrow depth selection and may be used to impose death from heat stress)
+CT_min:Critical thermal minimum, °C (affects burrow depth selection and may be used to impose death from cold stress)
+M_1: Metabolic rate parameter 1 V_O2=M_1*M^M_2*10^(M_3*Tb), in ml O2 / h, default parameters for lizards based on Eq. 2 from Andrews & Pough 1985. Physiol. Zool. 58:214-231
+M_2:Metabolic rate parameter 2
+M_3:Metabolic rate parameter 3
+
+MR_submit.csv:The metabolic rate data of P.vlangalii
+Elevation: the elevation of lizards 
+Sex:the gender of the lizards
+Tbody: the body temperatures when we measured the resting metabolic rate
+BM: the body mass of lizards (g)
+V_ml_g_h: resting metabolic rate (CO2 production rate:ml/g/h)
+V_ml_h: resting metabolic rate (CO2 production rate:ml/h)
+
+Tsel_submit.csv: The selected body temperature of P.vlangalii
+Elevation: the elevation of lizards 
+SVL: the snout-vent length of lizards(cm)
+BM: the body mass of lizards (g)
+Sex:the gender of the lizards
+Gravid: whether lizard is pregnant or not
+Tsel:the select body temperatures 
+
+Tbody.csv: the active body temperatures of P.vlangalii
+Year:the year we measured the data
+Date:the date we measured the data
+Elevation: the elevation of lizards
+Time: the time we measured the data (hour)
+Sex:the gender of the lizards
+SVL: the snout-vent length of lizards(cm)
+Tbody:the active body temperatures
+Gravid: whether lizard is pregnant or not
+Tsurface: the surface temperatures when we measured the body temperatures
+Tair:the air temperatures when we measured the body temperatures
+
+lizard_traits.R: analyze the physiological data
+Liz_mod_microglo.R: calculate the ecophysiological responses
